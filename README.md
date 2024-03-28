@@ -24,3 +24,7 @@ Available operations:
  overlay <image_file> <position> <output_file> - Overlay image on video
  thumbnail <output_file> <timestamp> - Generate video thumbnail
 ```
+
+# Contributing
+
+feel free to 
