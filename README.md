@@ -36,3 +36,7 @@ alias bv="$(pwd)/bash-video.sh"
 ./tests.sh
 bv
 ```
+
+# Contributing
+
+feel free to 
