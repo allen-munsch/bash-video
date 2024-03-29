@@ -41,3 +41,8 @@ Available operations:
 # Contributing
 
 feel free to 
+
+
+## filter docs
+
+- https://ffmpeg.org/ffmpeg-filters.html
