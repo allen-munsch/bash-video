@@ -33,7 +33,9 @@ cd bash-video
 
 alias bv="$(pwd)/bash-video.sh"
 
+# example usage can be seen in the tests
 ./tests.sh
+
 bv
 ```
 
