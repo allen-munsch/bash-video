@@ -67,16 +67,27 @@ function join_videos() {
   OUTPUT_FILE=$3
   verify_file "$INPUT_FILE1"
   verify_file "$INPUT_FILE2"
-  ffmpeg -i "concat:$INPUT_FILE1|$INPUT_FILE2" -c copy "$OUTPUT_FILE" || exit 1
+
+  # Create a temporary file to store the list of input files
+  TEMP_FILE=$(mktemp)
+  echo "file '$(realpath "$INPUT_FILE1")'" > "$TEMP_FILE"
+  echo "file '$(realpath "$INPUT_FILE2")'" >> "$TEMP_FILE"
+
+  # Use the concat demuxer with the temporary file
+  ffmpeg -f concat -safe 0 -i "$TEMP_FILE" -c copy -y "$(realpath "$OUTPUT_FILE")" || exit 1
+
+  # Remove the temporary file
+  rm "$TEMP_FILE"
 }
 
-# Change playback speed
 function change_speed() {
   INPUT_FILE=$1
   SPEED_FACTOR=$2
   OUTPUT_FILE=$3
   verify_file "$INPUT_FILE"
-  ffmpeg -i "$INPUT_FILE" -filter:v "setpts=$SPEED_FACTOR*PTS" -filter:a "atempo=$SPEED_FACTOR" "$OUTPUT_FILE" || exit 1
+  
+  RECIPROCAL_FACTOR=$(awk "BEGIN {print 1/$SPEED_FACTOR}")
+  ffmpeg -i "$INPUT_FILE" -filter:v "setpts=$RECIPROCAL_FACTOR*PTS" -filter:a "atempo=$SPEED_FACTOR" "$OUTPUT_FILE" || exit 1
 }
 
 # Optimize video to reduce size
@@ -84,7 +95,7 @@ function optimize_video() {
   INPUT_FILE=$1
   OUTPUT_FILE=$2
   verify_file "$INPUT_FILE"
-  ffmpeg -i "$INPUT_FILE" -vcodec libx264 -crf 28 "$OUTPUT_FILE" || exit 1
+  ffmpeg -i "$INPUT_FILE" -vcodec libx264 -crf 32 -filter:v fps=15 -b:a 96k "$OUTPUT_FILE" || exit 1
 }
 
 # Remove a segment from the beginning of the video
@@ -122,7 +133,7 @@ function extract_audio() {
   INPUT_FILE=$1
   OUTPUT_FILE=$2
   verify_file "$INPUT_FILE"
-  ffmpeg -i "$INPUT_FILE" -vn -acodec copy "$OUTPUT_FILE" || exit 1
+  ffmpeg -i "$INPUT_FILE" -vn -acodec libmp3lame -b:a 128k "$OUTPUT_FILE" || exit 1
 }
 
 # Add audio to video
@@ -169,7 +180,7 @@ function rotate_video() {
   ffmpeg -i "$INPUT_FILE" -vf "$TRANSPOSE" "$OUTPUT_FILE" || exit 1
 }
 
-# Record screen
+# Record screen, not sure if this works, i use obs studio
 function record_screen() {
   OUTPUT_FILE=$1
   DURATION=$2
