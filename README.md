@@ -1,9 +1,21 @@
 # bash-video
 bash cli video editing "suite" which ... just wraps ffmpeg
 
+I just kept forgetting all the little configuration bits.
 
+# install
 
 ```
+git clone git@github.com:allen-munsch/bash-video.git
+cd bash-video
+
+alias bv="$(pwd)/bash-video.sh"
+
+# example usage can be seen in the tests
+./tests.sh
+
+~$ bv
+
 Usage: bash_video.sh <operation> <input_file> [arguments...]
 
 Available operations:
@@ -23,20 +35,7 @@ Available operations:
  filter <filter_name> <output_file> - Apply video filter
  overlay <image_file> <position> <output_file> - Overlay image on video
  thumbnail <output_file> <timestamp> - Generate video thumbnail
-```
 
-# install
-
-```
-git clone git@github.com:allen-munsch/bash-video.git
-cd bash-video
-
-alias bv="$(pwd)/bash-video.sh"
-
-# example usage can be seen in the tests
-./tests.sh
-
-bv
 ```
 
 # Contributing
