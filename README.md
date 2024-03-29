@@ -24,3 +24,15 @@ Available operations:
  overlay <image_file> <position> <output_file> - Overlay image on video
  thumbnail <output_file> <timestamp> - Generate video thumbnail
 ```
+
+# install
+
+```
+git clone git@github.com:allen-munsch/bash-video.git
+cd bash-video
+
+alias bv="$(pwd)/bash-video.sh"
+
+./tests.sh
+bv
+```
