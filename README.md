@@ -3,6 +3,38 @@ bash cli video editing "suite" which ... just wraps ffmpeg
 
 I just kept forgetting all the little configuration bits.
 
+I have used this to splice up and put together demo videos, my workflow is the following:
+
+1) Record a demo video using ( https://obsproject.com/download )
+2) I use full video sink, and an audio source connected to my headset
+3) Open the clip using VLC, jot down the times to splice up the video
+
+Example video editing flow, where I do a speedup, and remove a section of video because of dead air:
+
+```
+alias bv="$(pwd)/bash-video.sh"
+cat tests.sh 
+
+# speedup 2x
+bv speedup ./2024-04-15\ 23-03-47.mp4 2 hubspot-email.mp4
+
+# check it
+open hubspot-email.mp4
+
+# documentation check
+cat tests.sh 
+
+# start splicing
+bv popright hubspot-email.mp4 75 left.mp4
+bv popleft hubspot-email.mp4 95 right.mp4
+
+# join the left and right clips
+bv join left.mp4 right.mp4 hubspot-email-multiseat.mp4
+
+# check the final cut
+open hubspot-email-multiseat.mp4 
+```
+
 # install
 
 ```
